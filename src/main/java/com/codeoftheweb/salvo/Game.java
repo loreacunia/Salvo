@@ -37,11 +37,8 @@ public class Game {
         return gameTime;
     }
 
-    public Set<GamePlayer> getGamePlayers() {
+    public  Set getGamePlayers() {
         return gamePlayers;
     }
-
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
-        this.gamePlayers = gamePlayers;
     }
-}
+

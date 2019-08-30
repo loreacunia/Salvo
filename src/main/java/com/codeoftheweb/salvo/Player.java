@@ -30,9 +30,6 @@ public class Player {
         return userName;
     }
 
-    public Set<GamePlayer> getGamePlayers() {
-        return gamePlayers;
-    }
 
     public String toString() {
         return userName;
