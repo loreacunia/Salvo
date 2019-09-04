@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 @SpringBootApplication
 public class SalvoApplication {
 
@@ -47,6 +51,22 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer4);
 			gamePlayerRepository.save(gamePlayer5);
 			gamePlayerRepository.save(gamePlayer6);
+
+			Set<String> shipL1 = new HashSet<>(Arrays.asList("H2","H3","H4"));
+			Set<String> shipL2 = new HashSet<>(Arrays.asList("E1","F1","G1"));
+			Set<String> shipL3 = new HashSet<>(Arrays.asList("B4","B5"));
+			Set<String> shipL4 = new HashSet<>(Arrays.asList("B5","C5","D5"));
+			Set<String> shipL5 = new HashSet<>(Arrays.asList("F1","F2"));
+
+			Ship ship1 = new Ship(gamePlayer1,"Destroyer",shipL1);
+			Ship ship2 = new Ship(gamePlayer2,"Submarine",shipL2);
+			Ship ship3 = new Ship(gamePlayer3,"Patrol Boat",shipL3);
+			Ship ship4 = new Ship(gamePlayer2,"Destroyer",shipL4);
+			Ship ship5 = new Ship(gamePlayer2,"Destroyer",shipL1);
+
+
+			shipRepository.saveAll(Arrays.asList(ship1,ship2,ship3,ship4,ship5));
+
 
 
 		};
