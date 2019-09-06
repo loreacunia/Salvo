@@ -3,6 +3,8 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -37,8 +39,16 @@ public class Game {
         return gameTime;
     }
 
-    public  Set getGamePlayers() {
+    public  Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
+    }
+
+    public Map<String, Object> getDto() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", getId());
+        dto.put("created", getDate().getTime());
+        dto.put("gamePlayers", getGamePlayers().stream().map(gamePlayer -> gamePlayer.getDto()));
+        return dto;
     }
     }
 

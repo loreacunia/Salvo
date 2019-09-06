@@ -2,10 +2,7 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 
@@ -54,7 +51,15 @@ public class Ship {
         return Shiplocation;
     }
 
+    public Map<String,Object> getDto(){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("shipType", getType());
+        dto.put("shipLocations", getLocations());
+        return dto;
+    }
+
 }
+
 
 
 
