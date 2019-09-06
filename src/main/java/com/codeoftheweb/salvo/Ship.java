@@ -54,7 +54,6 @@ public class Ship {
         return Shiplocation;
     }
 
-    public Set<String> getShipLocations () {return Shiplocation;}
 }
 
 

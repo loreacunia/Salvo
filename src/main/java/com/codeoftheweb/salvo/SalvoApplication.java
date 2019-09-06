@@ -59,10 +59,10 @@ public class SalvoApplication {
 			Set<String> shipL5 = new HashSet<>(Arrays.asList("F1","F2"));
 
 			Ship ship1 = new Ship(gamePlayer1,"Destroyer",shipL1);
-			Ship ship2 = new Ship(gamePlayer2,"Submarine",shipL2);
+			Ship ship2 = new Ship(gamePlayer1,"Submarine",shipL2);
 			Ship ship3 = new Ship(gamePlayer3,"Patrol Boat",shipL3);
 			Ship ship4 = new Ship(gamePlayer2,"Destroyer",shipL4);
-			Ship ship5 = new Ship(gamePlayer2,"Destroyer",shipL1);
+			Ship ship5 = new Ship(gamePlayer2,"Destroyer",shipL5);
 
 
 			shipRepository.saveAll(Arrays.asList(ship1,ship2,ship3,ship4,ship5));
