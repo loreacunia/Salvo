@@ -24,6 +24,9 @@ public class SalvoController {
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
 
+    @Autowired
+    private PlayerRepository playerRepository;
+
     @RequestMapping("/games")
     public List<Map<String, Object>> getGames() {
         return gameRepository.findAll()
@@ -45,6 +48,14 @@ public class SalvoController {
         dto.put("salvos", salvos.stream().map(salvo -> salvo.getDto()));
         return dto;
     }
+    @RequestMapping("/leaderboard")
+    public List<Map<String, Object>> getPLayers() {
+        return playerRepository.findAll()
+                .stream()
+                .map(Player::getLeaderBoardDto)
+                .collect(toList());
+    }
+
     private List<Map<String, Object>> getShipList(Set<Ship> ships) {
         return ships
                 .stream()

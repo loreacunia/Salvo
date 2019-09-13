@@ -2,18 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>¡Salvo!</title>
 </head>
 <body>
-<ul id="app">
+<div id="app">
 
-    <li v-for="game in games">
-        {{game}}
-    </li>
-</ul>
+
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th> Top </th>
+                <th> Email </th>
+                <th> Games </th>
+                <th> Won </th>
+                <th> Ties </th>
+                <th> Total </th>
+            </tr>
+            </thead>
+            <tbody class="table table-striped">
+            <tr v-for="(player, index) in players">
+                <th scope="row"> {{index + 1 }} </th>
+                <td>{{player.email}} </td>
+                <td> {{player.games}} </td>
+                <td> {{player.won}} </td>
+                <td> {{player.ties}} </td>
+                <td> {{player.total}} </td>
+            </tr>
+            </tbody>
+
+</table>
+</div>
 
 <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="bootstrap.min.js"></script>
+
 <script src="games.js"></script>
 
 </body>

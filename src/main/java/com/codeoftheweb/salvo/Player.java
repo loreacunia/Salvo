@@ -1,10 +1,12 @@
 package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Player {
@@ -14,11 +16,14 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private String userName;
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<Score> score;
 
-    public Player() { }
+    public Player() {
+    }
 
     public Player(String email) {
         this.userName = email;
@@ -32,16 +37,53 @@ public class Player {
         return userName;
     }
 
+    public Set<Score> getScore() {
+        return score;
+    }
 
     public String toString() {
         return userName;
     }
 
-    public Map<String, Object> getDto() {
+
+    public Set<Score> getWon() {
+        return getScore().stream().filter(score -> score.getScore() == 1).collect(Collectors.toSet());
+    }
+
+
+    public Set<Score> getLost(){
+        return getScore().stream().filter(score -> score.getScore() == 0).collect(Collectors.toSet());
+    }
+
+
+    public Set<Score> getTies(){
+        return getScore().stream().filter(score -> score.getScore() == 0.5).collect(Collectors.toSet());
+    }
+
+
+    public double getTotal() {
+        return  getWon().size() + getTies().size() * 0.5;
+    }
+
+    public Map<String, Object> getPlayerDto() {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id",getId());
-        dto.put("email",getUserName());
+        dto.put("id", getId());
+        dto.put("email", getUserName());
         return dto;
     }
+
+    public Map<String, Object> getLeaderBoardDto() {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", getId());
+        dto.put("email", getUserName());
+        dto.put("games", getScore().size());
+        dto.put("total", getTotal());
+        dto.put("won", getWon().size());
+        dto.put("ties", getTies().size());
+        dto.put("lost", getLost().size());
+        return dto;
+    }
+
+
 }
 

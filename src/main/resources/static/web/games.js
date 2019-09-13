@@ -1,14 +1,15 @@
 var  app = new Vue ({
     el: "#app",
     data:{
-    games:[]
+    games:[],
+    players:[]
     }
 })
 loadData();
 function loadData() {
-    $.get("/api/games")
+    $.get("/api/leaderboard")
     .done(function(data) {
-      app.games = data;
+      app.players = data;
     })
     .fail(function( jqXHR, textStatus ) {
       console.log( "Failed: " + textStatus );
