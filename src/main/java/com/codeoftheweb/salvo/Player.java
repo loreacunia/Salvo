@@ -14,8 +14,16 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
+
     private long id;
+
     private String userName;
+
+    private String name;
+
+    private String password;
+
+
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;
 
@@ -25,8 +33,10 @@ public class Player {
     public Player() {
     }
 
-    public Player(String email) {
-        this.userName = email;
+    public Player(String userName, String name, String password) {
+        this.userName = userName;
+        this.name = name;
+        this.password = password;
     }
 
     public long getId() {
@@ -35,6 +45,18 @@ public class Player {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Set<Score> getScore() {
