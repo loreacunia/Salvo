@@ -35,7 +35,6 @@ public class Player {
 
     public Player(String userName, String name, String password) {
         this.userName = userName;
-        this.name = name;
         this.password = password;
     }
 
@@ -55,9 +54,6 @@ public class Player {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public Set<Score> getScore() {
         return score;

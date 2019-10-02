@@ -1,13 +1,17 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,8 @@ public class SalvoController {
     @Autowired
     private PlayerRepository playerRepository;
 
+
+
     @RequestMapping("/games")
     public Map<String, Object> getGames(Authentication authentication) {
         Map <String, Object> dto = new LinkedHashMap<>();
@@ -47,9 +53,27 @@ public class SalvoController {
 
     }
 
+
     private boolean isGuest(Authentication authentication) {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String email, @RequestParam String password) {
+
+        if (email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
+        }
+        else if (playerRepository.findByUserName(email) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        Player player = new Player ( email,"", password);
+        playerRepository.save(player);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     @RequestMapping("/game_view/{id}")
     public Map<String, Object> getGameView(@PathVariable long id) {
