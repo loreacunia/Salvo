@@ -33,7 +33,7 @@ public class Player {
     public Player() {
     }
 
-    public Player(String userName, String name, String password) {
+    public Player(String userName, String password) {
         this.userName = userName;
         this.password = password;
     }

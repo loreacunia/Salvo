@@ -69,7 +69,7 @@ public class SalvoController {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
-        Player player = new Player ( email,"", password);
+        Player player = new Player ( email, password);
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
