@@ -32,14 +32,46 @@
             </tbody>
 
 </table>
+    <div v-if="currentUser=='Guest'">
     <form id="login-form" onsubmit="return false">
         <label>Name: <input type="text" name="username"></label>
-        <label>Password: <input type="text" name="password"></label>
+        <label>Password: <input type="password" name="password"></label>
+        <button onclick="login()">LOGIN</button>
+
     </form>
 
-    <form id="logout-form" onsubmit="return false">
-        <button>Log out</button>
-    </form>
+
+    <!-- Registrarse -->
+        <h1>Register</h1>
+        <form id="register-form" onsubmit="return false">
+            <div class="contenedor-input">
+                <label>
+                    Email <span class="req">*</span>
+                </label>
+                <input type="email" name="username" required>
+            </div>
+            <div class="contenedor-input">
+                <label>
+                    Contraseña <span class="req">*</span>
+                </label>
+                <input type="password" name="password" required >
+            </div>
+
+            <div class="contenedor-input">
+                <label>
+                    Repetir Contraseña <span class="req">*</span>
+                </label>
+                <input type="password" name="password2" required>
+            </div>
+
+            <button onclick="register()">Register</button>
+        </form>
+    </div>
+
+
+<form id="logout-form" onsubmit="return false" v-else>
+    <button onclick="logout()">Log out</button>
+</form>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
