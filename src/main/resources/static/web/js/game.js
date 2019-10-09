@@ -1,14 +1,10 @@
-$(function () {
-  loadData();
-});
 
-function getParameterByName(name) {
-  var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-}
+ function getParameterByName(name) {
+   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+ }
 
-function loadData() {
-  $.get('/api/game_view/' + getParameterByName('gp'))
+ $.get('/api/game_view/' + getParameterByName('gp'))
     .done(function (data) {
       console.log(data);
       var playerInfo;
@@ -46,7 +42,7 @@ function loadData() {
     .fail(function (jqXHR, textStatus) {
       alert('Failed: ' + textStatus);
     });
-}
+
 
 function isHit(shipLocation,salvos,playerId) {
   var hit = 0;
@@ -57,5 +53,5 @@ function isHit(shipLocation,salvos,playerId) {
           hit = salvo.turn;
       });
   });
-  return hit;
-}
+  return hit
+  };
