@@ -30,8 +30,32 @@
                 <td> {{player.total}} </td>
             </tr>
             </tbody>
+        </table>
 
-</table>
+    <div>
+        <button onclick="createGame()">Create game </button>
+    </div>
+
+    <table class="table">
+        <h3>Games Completed</h3>
+        <thead class="thead-dark">
+        <th>N°</th>
+        <th>Player 1 </th>
+        <th>Player 2</th>
+        <th></th>
+        </thead>
+        <tbody class="table table-striped">
+        <tr v-for="(game in games">
+          <th scope="row"> {{game.id}}</th>
+            <td>{{game.gamePlayers[0].name}}</td>
+            <td>{{game.gamePlayers[1].name}}</td>
+            <td v-if="currentUser != 'Guest' && currentUser != game.gamePlayers[0].name">
+            <button onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
     <div v-if="currentUser=='Guest'">
     <form id="login-form" onsubmit="return false">
         <label>Name: <input type="text" name="username"></label>
@@ -39,7 +63,6 @@
         <button onclick="login()">LOGIN</button>
 
     </form>
-
 
     <!-- Registrarse -->
         <h1>Register</h1>

@@ -28,7 +28,7 @@ function loadData() {
  function cargarUsuario(){
      $.get("/api/games")
            .done(function(data){
-               app.games = data.games;
+               app.games = data.games.reverse();
                app.currentUser = data.player.email;
                })
             .fail(function (jqXHR, textStatus) {
@@ -37,6 +37,13 @@ function loadData() {
                 })
     }
 
+function createGame(){
+
+}
+
+function joinGame (){
+location.href = "/web/games.html?gp"+gpid;
+}
 
 function register(){
 var form = document.getElementById("register-form")
@@ -46,6 +53,9 @@ var form = document.getElementById("register-form")
  })
   .done (function (jqXHR, textStatus) {
                      alert('Success: ' + textStatus);
+                 })
+ .done(function (){
+  location.reload();
                  })
        .fail(function (jqXHR, textStatus) {
             alert('Failed: ' + textStatus);
