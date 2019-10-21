@@ -29,7 +29,7 @@ function loadData() {
      $.get("/api/games")
            .done(function(data){
                app.games = data.games.reverse();
-               app.currentUser = data.player.email;
+               app.currentUser = data.player;
                })
             .fail(function (jqXHR, textStatus) {
                alert('Failed: ' + textStatus);
@@ -63,7 +63,7 @@ var form = document.getElementById("register-form")
     }
 
      function login() {
-     if(app.currentUser == "Guest"){
+     if(app.currentUser == "guest"){
     var form = document.getElementById('login-form')
  $.post("/api/login",
    { username: form["username"].value,

@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.net.URLEncoder;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 import static java.util.stream.Collectors.toList;
@@ -35,15 +32,12 @@ public class SalvoController {
     private PlayerRepository playerRepository;
 
 
-
     @RequestMapping("/games")
     public Map<String, Object> getGames(Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<>();
-        if (Guest(authentication)){
-            Map<String, Object> guest = new LinkedHashMap<>();
-            guest.put("email", "Guest");
-            dto.put("player", guest);
-        }else{
+        if (Guest(authentication)) {
+            dto.put("player", "guest");
+        } else {
             Player player = playerRepository.findByUserName(authentication.getName());
             dto.put("player", player.getPlayerDto());
         }
@@ -53,6 +47,7 @@ public class SalvoController {
                 .collect(toList()));
         return dto;
     }
+
     private boolean Guest(Authentication authentication) {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
@@ -63,12 +58,11 @@ public class SalvoController {
 
         if (email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
-        }
-        else if (playerRepository.findByUserName(email) !=  null) {
+        } else if (playerRepository.findByUserName(email) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
-        Player player = new Player ( email, password);
+        Player player = new Player(email, password);
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -87,13 +81,48 @@ public class SalvoController {
         dto.put("salvos", salvos.stream().map(salvo -> salvo.getDto()));
         return dto;
     }
+
+    // CREAR JUEGO
+
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+        if (Guest(authentication)) {
+            return new ResponseEntity<>(MakeMap("error", "No player logged in"), HttpStatus.FORBIDDEN);
+        }
+        Game game = gameRepository.save(new Game(0));
+
+        Player player = playerRepository.findByUserName(authentication.getName());
+
+        GamePlayer gamePlayer = gamePlayerRepository.save(new GamePlayer(player, game));
+        return new ResponseEntity<>(MakeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
+
+    }
+
+
+    //Unirse al juego
+
+    @RequestMapping(path = "/games/{id}/players")
+
+    public ResponseEntity<Map<String, Object>> joinGame (Authentication authentication, @PathVariable long id){
+        Game game = gameRepository.findById(id).get();
+        if (Guest(authentication)) {
+            return new ResponseEntity<>(MakeMap("error", "No player logged in"), HttpStatus.FORBIDDEN);
+        }
+        if (game==null ResponseEntity <>(MakeMap("error","That game doesn't exist"),HttpStatus.FORBIDDEN);
+    }
+
+
+
+
     @RequestMapping("/leaderboard")
-    public List<Map<String, Object>> getPLayers() {
+    public List<Map<String,Object>> getPLayers() {
         return playerRepository.findAll()
                 .stream()
                 .map(Player::getLeaderBoardDto)
                 .collect(toList());
     }
+
+
 
     private List<Map<String, Object>> getShipList(Set<Ship> ships) {
         return ships
@@ -101,5 +130,12 @@ public class SalvoController {
                 .map(ship -> ship.getDto())
                 .collect(toList());
     }
+
+    public Map<String,Object> MakeMap (String key, Object value){
+        Map<String, Object> crearMapa = new LinkedHashMap<>();
+        crearMapa.put (key, value);
+        return crearMapa;
+    }
+
 }
 

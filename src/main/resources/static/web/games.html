@@ -49,14 +49,14 @@
           <th scope="row"> {{game.id}}</th>
             <td>{{game.gamePlayers[0].name}}</td>
             <td>{{game.gamePlayers[1].name}}</td>
-            <td v-if="currentUser != 'Guest' && currentUser != game.gamePlayers[0].name">
+            <td v-if="currentUser != 'guest' && currentUser != game.gamePlayers[0].name">
             <button onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div v-if="currentUser=='Guest'">
+    <div v-if="currentUser=='guest'">
     <form id="login-form" onsubmit="return false">
         <label>Name: <input type="text" name="username"></label>
         <label>Password: <input type="password" name="password"></label>
@@ -92,7 +92,7 @@
     </div>
 
 
-<form id="logout-form" onsubmit="return false" v-else>
+<form id="logout-form" onsubmit="return false">
     <button onclick="logout()">Log out</button>
 </form>
 </div>
