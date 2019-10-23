@@ -8,12 +8,14 @@
     .done(function (data) {
       console.log(data);
       var playerInfo;
-      if (data.gamePlayers[0].id == getParameterByName('gp'))
-        playerInfo = [data.gamePlayers[0].player, data.gamePlayers[1].player];
-      else
-        playerInfo = [data.gamePlayers[1].player, data.gamePlayers[0].player];
+      if (data.gamePlayers[0].id == getParameterByName('gp')) {
+        playerInfo = [data.gamePlayers[0].name, data.gamePlayers[1].name];
+}
+      else{
+        playerInfo = [data.gamePlayers[1].name, data.gamePlayers[0].name];
+        }
 
-      $('#playerInfo').text(playerInfo[0].email + '(you) vs ' + playerInfo[1].email);
+      $('#playerInfo').text(playerInfo[0].name + '(you) vs ' + playerInfo[1].name);
 
       data.ships.forEach(function (shipPiece) {
         shipPiece.shipLocations.forEach(function (shipLocation) {

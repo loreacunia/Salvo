@@ -1,18 +1,15 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static java.util.stream.Collectors.toList;
@@ -103,14 +100,26 @@ public class SalvoController {
 
     @RequestMapping(path = "/games/{id}/players")
 
-    public ResponseEntity<Map<String, Object>> joinGame (Authentication authentication, @PathVariable long id){
-        Game game = gameRepository.findById(id).get();
+    public ResponseEntity<Map<String, Object>> joinGame (Authentication authentication, @PathVariable long id) {
+        Game game = gameRepository.findById(id).orElse(null);
+        if (game == null) {
+            return new ResponseEntity<>(MakeMap("error", "That game doesn't exist"), HttpStatus.FORBIDDEN);
+        }
+
         if (Guest(authentication)) {
             return new ResponseEntity<>(MakeMap("error", "No player logged in"), HttpStatus.FORBIDDEN);
         }
-        if (game==null ResponseEntity <>(MakeMap("error","That game doesn't exist"),HttpStatus.FORBIDDEN);
-    }
 
+        if  (game.getGamePlayers().stream().count()>1){
+            return new ResponseEntity<>(MakeMap("error", "Game full"), HttpStatus.FORBIDDEN);
+        }
+
+        if (game.getGamePlayers().stream().map(gamePlayer -> gamePlayer.getPlayer().getUserName()).collect(Collectors.toList()).contains(authentication.getName())){
+            return new ResponseEntity<>(MakeMap("error", "You can't join your game"),HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(MakeMap("success", "Game started"), HttpStatus.ACCEPTED);
+    }
 
 
 
