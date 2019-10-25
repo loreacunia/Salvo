@@ -38,7 +38,11 @@ function loadData() {
     }
 
 function createGame(){
-
+$.post("/api/games")
+.done (function (data){
+                 alert ('Success game created: ');
+            window.location.href = '/web/game.html?gp='+data.gpid;
+    })
 }
 
 function joinGame (){

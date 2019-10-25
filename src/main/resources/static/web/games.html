@@ -9,70 +9,23 @@
 <body>
 <div id="app">
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h3>Leaderboard</h3>
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th> Top </th>
-                    <th> Email </th>
-                    <th> Games </th>
-                    <th> Won </th>
-                    <th> Ties </th>
-                    <th> Total </th>
-                </tr>
-                </thead>
-                <tbody class="table table-striped">
-                <tr v-for="(player, index) in players">
-                    <th scope="row"> {{index + 1 }} </th>
-                    <td>{{player.email}} </td>
-                    <td> {{player.games}} </td>
-                    <td> {{player.won}} </td>
-                    <td> {{player.ties}} </td>
-                    <td> {{player.total}} </td>
-                </tr>
-                </tbody>
-            </table>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+        <div class="container-fluid" v-if="currentUser=='guest'">
+            <form id="login-form" onsubmit="return false">
+                <label>Name: <input type="text" name="username"></label>
+                <label>Password: <input type="password" name="password"></label>
+                <button  type="button" class="btn btn-success" onclick="login()">LOGIN</button>
+            </form>
         </div>
-        <button onclick="createGame()">Create game </button>
+            </div>
 
-        <div class="col">
-            <h3>Games Completed</h3>
-            <table class="table">
-                <thead class="thead-dark">
-                <tr>
-                    <th>N°</th>
-                    <th>Player 1 </th>
-                    <th>Player 2</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody class="table table-striped">
-                <tr v-for="(game in games">
-                    <th scope="row"> {{game.id}}</th>
-                    <td>{{game.gamePlayers[0].name}}</td>
-                    <td>{{game.gamePlayers[1].name}}</td>
-                    <td v-if="currentUser != 'guest' && currentUser != game.gamePlayers[0].name">
-                        <button  type="button" class="btn btn-success" onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="container-fluid" v-if="currentUser=='guest'">
-        <form id="login-form" onsubmit="return false">
-            <label>Name: <input type="text" name="username"></label>
-            <label>Password: <input type="password" name="password"></label>
-            <button  type="button" class="btn btn-success" onclick="login()">LOGIN</button>
-        </form>
-    </div>
-
-    <!-- Registrarse -->
-        <h1>Register</h1>
+        <!-- Registrarse -->
+            <div v-show="currentUser == 'guest'">
+        <h3>Register</h3>
+            <div class="col">
         <form id="register-form" onsubmit="return false">
             <div class="contenedor-input">
                 <label>
@@ -96,13 +49,82 @@
 
             <button type="button" class="btn btn-success" onclick="register()">Register</button>
         </form>
+            </div>
+
+            </div>
+            <div class="col">
+                <form id="logout-form" onsubmit="return false">
+                    <button type="button" class="btn btn-success" onclick="logout()">Log out</button>
+                </form>
+            </div>
+            <div class="col">
+                <button onclick="createGame()">Create game </button>
+            </div>
+
+
+        </div>
     </div>
 
-<div class="container-fluid">
-<form id="logout-form" onsubmit="return false">
-    <button type="button" class="btn btn-success" onclick="logout()">Log out</button>
-</form>
-</div>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Leaderboard</h3>
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th> Top </th>
+                        <th> Email </th>
+                        <th> Games </th>
+                        <th> Won </th>
+                        <th> Ties </th>
+                        <th> Total </th>
+                    </tr>
+                    </thead>
+                    <tbody class="table table-striped">
+                    <tr v-for="(player, index) in players">
+                        <th scope="row"> {{index + 1 }} </th>
+                        <td>{{player.email}} </td>
+                        <td> {{player.games}} </td>
+                        <td> {{player.won}} </td>
+                        <td> {{player.ties}} </td>
+                        <td> {{player.total}} </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <h3>Current games</h3>
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>N°</th>
+                        <th>Player 1 </th>
+                        <th>Player 2</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="table table-striped">
+                    <tr v-for="(game in games">
+                        <th scope="row"> {{game.id}}</th>
+                        <td>{{game.gamePlayers[0].name}}</td>
+                        <td>{{game.gamePlayers[1].name}}</td>
+                        <div>
+                            <td v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full </td>
+                        </div>
+                        <div>
+                        <td v-else="currentUser != 'guest' && currentUser.name != game.gamePlayers[0].name">
+                            <button  type="button" class="btn btn-success" onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
+                        </td>
+                        </div>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.0.js"></script>

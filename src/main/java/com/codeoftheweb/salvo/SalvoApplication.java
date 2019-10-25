@@ -50,10 +50,12 @@ public class SalvoApplication {
             Game game1 = new Game();
             Game game2 = new Game(3600);
             Game game3 = new Game(7200);
+            Game game4 = new Game ();
 
             gameRepository.save(game1);
             gameRepository.save(game2);
             gameRepository.save(game3);
+            gameRepository.save(game4);
 
             GamePlayer gamePlayer1 = new GamePlayer(player1, game1);
             GamePlayer gamePlayer2 = new GamePlayer(player2, game1);
@@ -61,6 +63,7 @@ public class SalvoApplication {
             GamePlayer gamePlayer4 = new GamePlayer(player4, game2);
             GamePlayer gamePlayer5 = new GamePlayer(player1, game3);
             GamePlayer gamePlayer6 = new GamePlayer(player4, game3);
+            GamePlayer gamePlayer7 = new GamePlayer(player1, game4);
 
             gamePlayerRepository.save(gamePlayer1);
             gamePlayerRepository.save(gamePlayer2);
@@ -68,6 +71,7 @@ public class SalvoApplication {
             gamePlayerRepository.save(gamePlayer4);
             gamePlayerRepository.save(gamePlayer5);
             gamePlayerRepository.save(gamePlayer6);
+            gamePlayerRepository.save(gamePlayer7);
 
             Set<String> shipL1 = new HashSet<>(Arrays.asList("H2", "H3", "H4"));
             Set<String> shipL2 = new HashSet<>(Arrays.asList("E1", "F1", "G1"));
