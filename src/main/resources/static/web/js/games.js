@@ -21,7 +21,7 @@ function loadData() {
     app.players = data;
     })
   .fail(function (jqXHR, textStatus) {
-        alert('Failed: ' + textStatus);
+        swal('Failed: ' + textStatus);
       });
 
 }
@@ -32,7 +32,7 @@ function loadData() {
                app.currentUser = data.player;
                })
             .fail(function (jqXHR, textStatus) {
-               alert('Failed: ' + textStatus);
+               swal('Failed: ' + textStatus);
 
                 })
     }
@@ -40,8 +40,11 @@ function loadData() {
 function createGame(){
 $.post("/api/games")
 .done (function (data){
-                 alert ('Success game created: ');
-            window.location.href = '/web/game.html?gp='+data.gpid;
+                 swal('Success game created: ',{
+                 timer: 2500,
+                 });
+            window.setTimeout(function() {window.location.href = '/web/game.html?gp='+data.gpid;
+            }, 2500)
     })
 }
 
@@ -56,13 +59,13 @@ var form = document.getElementById("register-form")
  password : form ["password"].value
  })
   .done (function (jqXHR, textStatus) {
-                     alert('Success: ' + textStatus);
+                     swal('Success: ' + textStatus);
                  })
  .done(function (){
   location.reload();
                  })
        .fail(function (jqXHR, textStatus) {
-            alert('Failed: ' + textStatus);
+            swal('Failed: ' + textStatus);
         });
     }
 
@@ -74,7 +77,7 @@ var form = document.getElementById("register-form")
     password: form["password"].value })
     .done(setTimeout(function(){ cargarUsuario(); },1000))
       .fail(function (jqXHR, textStatus) {
-        alert('Failed: ' + textStatus);
+        swal('Failed: ' + textStatus);
           });
                    }else{
                        console.log("Ya existe un usuario")
@@ -84,6 +87,8 @@ function logout() {
       $.post("/api/logout")
        .done(window.location.replace("games.html"))
        .fail(function (jqXHR, textStatus) {
-            alert('Failed: ' + textStatus);
+            swal('Failed: ' + textStatus);
         });
     }
+
+

@@ -31,7 +31,7 @@ public class SalvoController {
 
     @RequestMapping("/games")
     public Map<String, Object> getGames(Authentication authentication) {
-        Map<String, Object> dto = new LinkedHashMap<>();
+        Map<String, Object> dto = new HashMap<>();
         if (Guest(authentication)) {
             dto.put("player", "guest");
         } else {

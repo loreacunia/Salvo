@@ -53,12 +53,12 @@
 
             </div>
             <div class="col">
-                <form id="logout-form" onsubmit="return false">
+                <form v-show="currentUser !='guest'" id="logout-form" onsubmit="return false">
                     <button type="button" class="btn btn-success" onclick="logout()">Log out</button>
                 </form>
             </div>
             <div class="col">
-                <button onclick="createGame()">Create game </button>
+                <button v-show="currentUser !='guest'" onclick="createGame()">Create game </button>
             </div>
 
 
@@ -102,22 +102,26 @@
                         <th>N°</th>
                         <th>Player 1 </th>
                         <th>Player 2</th>
-                        <th></th>
+                        <!-- si no esta loggeado -->
+                        <th v-show="currentUser !='guest'"></th>
+                        <!-- si está loggeado -->
+                        <th v-show="currentUser !='guest'">Join Game</th>
                     </tr>
                     </thead>
                     <tbody class="table table-striped">
-                    <tr v-for="(game in games">
+                    <tr v-for="game in games">
                         <th scope="row"> {{game.id}}</th>
                         <td>{{game.gamePlayers[0].name}}</td>
-                        <td>{{game.gamePlayers[1].name}}</td>
-                        <div>
-                            <td v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full </td>
-                        </div>
-                        <div>
-                        <td v-else="currentUser != 'guest' && currentUser.name != game.gamePlayers[0].name">
-                            <button  type="button" class="btn btn-success" onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
+                        <td>{{game.gamePlayers[1] != null ? game.gamePlayers[1].name : "Waiting oponent" }}</td>
+                        <!-- si no esta loggeado -->
+                        <td v-show="currentUser !='guest'"></td>
+                        <!-- si el juego esta completo -->
+                        <td v-if="currentUser !='guest' && game.gamePlayers[0] && game.gamePlayers[1]"> Game full </td>
+                        <!-- unirse al juego -->
+                        <td v-if="currentUser != 'guest' && currentUser.name != game.gamePlayers[0].name && ! game.gamePlayers[1]">
+                            <button  type="button" class="btn btn-sm btn-success" onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
                         </td>
-                        </div>
+                        <!-- volver al juego -->
 
                     </tr>
                     </tbody>
@@ -130,6 +134,7 @@
 <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/games.js"></script>
 
 </body>
