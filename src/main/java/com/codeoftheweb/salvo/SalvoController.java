@@ -98,7 +98,7 @@ public class SalvoController {
 
     //Unirse al juego
 
-    @RequestMapping(path = "/games/{id}/players")
+    @RequestMapping(path = "/games/{id}/players", method = RequestMethod.POST)
 
     public ResponseEntity<Map<String, Object>> joinGame (Authentication authentication, @PathVariable long id) {
         Game game = gameRepository.findById(id).orElse(null);
@@ -118,7 +118,12 @@ public class SalvoController {
             return new ResponseEntity<>(MakeMap("error", "You can't join your game"),HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(MakeMap("success", "Game started"), HttpStatus.ACCEPTED);
+        Player player = playerRepository.findByUserName(authentication.getName());
+        GamePlayer gamePlayer = new GamePlayer(player, game);
+
+        gamePlayerRepository.save(gamePlayer);
+
+        return new ResponseEntity<>(MakeMap("gpId", gamePlayer.getId()), HttpStatus.ACCEPTED);
     }
 
 

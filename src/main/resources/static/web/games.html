@@ -119,9 +119,14 @@
                         <td v-if="currentUser !='guest' && game.gamePlayers[0] && game.gamePlayers[1]"> Game full </td>
                         <!-- unirse al juego -->
                         <td v-if="currentUser != 'guest' && currentUser.name != game.gamePlayers[0].name && ! game.gamePlayers[1]">
-                            <button  type="button" class="btn btn-sm btn-success" onclick="joinGame(game.gamePlayers[0].gpid)">Join Game</button>
+                            <button  type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">Join Game</button>
                         </td>
+
+
                         <!-- volver al juego -->
+                         <td v-show= "currentUser != 'guest' && game.gamePlayers[1] == null">
+                            <button  type="button" class="btn btn-sm btn-success" v-on:click="returnToGame(game.gamePlayers[0].gpid)">Return</button>
+                        </td>
 
                     </tr>
                     </tbody>

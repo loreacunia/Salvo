@@ -4,8 +4,20 @@ var  app = new Vue ({
     games:[],
     players:[],
     currentUser: ""
+    },
+    methods: {
+    returnToGame(id) {
+    window.location.href = "http://localhost:8080/web/game.html?gp=" +id;
+    },
+    joinGame(gameid){
+    $.post ("/api/games/"+gameid + "/players")
+    .done(function(data){
+    window.location.href = "http://localhost:8080/web/game.html?gp="+data.gpId;
+    })
+    .fail(swal("Could not join game!"));
     }
-})
+    }
+    });
 $(function () {
   loadData();
   cargarUsuario();
@@ -46,10 +58,6 @@ $.post("/api/games")
             window.setTimeout(function() {window.location.href = '/web/game.html?gp='+data.gpid;
             }, 2500)
     })
-}
-
-function joinGame (){
-location.href = "/web/games.html?gp"+gpid;
 }
 
 function register(){
