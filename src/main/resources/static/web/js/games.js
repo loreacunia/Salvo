@@ -70,25 +70,52 @@ var form = document.getElementById("register-form")
                      swal('Success: ' + textStatus);
                  })
  .done(function (){
-  location.reload();
-                 })
-       .fail(function (jqXHR, textStatus) {
-            swal('Failed: ' + textStatus);
-        });
-    }
+ swal("Account created successfully. Redirecting...", {
+         closeOnClickOutside: false,
+         icon: "success",
+         buttons: false,
+         timer: 2500,
+       });
+       window.setTimeout(function () { window.location.reload() }, 2500);
+     })
+     .fail(function () {
+       swal("Sorry, we couldn't create your account. Try again.", {
+         closeOnClickOutside: true,
+         icon: "warning",
+         buttons: false,
+         timer: 2500,
+       });
+       //window.setTimeout(function () { window.location.reload() }, 2500);
+     });
+ }
+
 
      function login() {
      if(app.currentUser == "guest"){
     var form = document.getElementById('login-form')
- $.post("/api/login",
-   { username: form["username"].value,
-    password: form["password"].value })
-    .done(setTimeout(function(){ cargarUsuario(); },1000))
-      .fail(function (jqXHR, textStatus) {
-        swal('Failed: ' + textStatus);
+ $.post("/api/login", {
+    username: form["username"].value,
+    password: form["password"].value
+    })
+    .done(function(){
+     swal("Welcome. Lest play!!", {
+            closeOnClickOutside: false,
+            icon: "success",
+            buttons: false,
+            timer: 2500,
           });
-                   }else{
-                       console.log("Ya existe un usuario")
+          window.setTimeout(function () { window.location.reload() }, 2500);
+        })
+
+
+      .fail(function() {
+       swal("Sorry, we couldn't access your account. Try again", {
+               closeOnClickOutside: true,
+               icon: "error",
+               buttons: false,
+               timer: 2500,
+             });
+    });
     }
     }
 function logout() {
@@ -98,5 +125,7 @@ function logout() {
             swal('Failed: ' + textStatus);
         });
     }
+
+
 
 

@@ -15,7 +15,7 @@
         playerInfo = [data.gamePlayers[1].name, data.gamePlayers[0].name];
         }
 
-      $('#playerInfo').text(playerInfo[0].name + '(you) vs ' + playerInfo[1].name);
+      $('#playerInfo').text(playerInfo[0]+ '(you) vs ' + playerInfo[1]);
 
       data.ships.forEach(function (shipPiece) {
         shipPiece.shipLocations.forEach(function (shipLocation) {
