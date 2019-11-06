@@ -1,23 +1,28 @@
 var  app = new Vue ({
     el: "#app",
     data:{
-    games:[],
-    players:[],
-    currentUser: ""
+        games:[],
+        players:[],
+        currentUser: "",
+        usernameLogin: "",
+        passwordLogin: "",
+        usernameRegistration: "",
+        passwordRegistration:""
     },
     methods: {
-    returnToGame(id) {
-    window.location.href = "http://localhost:8080/web/game.html?gp=" +id;
-    },
-    joinGame(gameid){
-    $.post ("/api/games/"+gameid + "/players")
-    .done(function(data){
-    window.location.href = "http://localhost:8080/web/game.html?gp="+data.gpId;
-    })
-    .fail(swal("Could not join game!"));
+        returnToGame(id) {
+            window.location.href = "http://localhost:8080/web/game.html?gp=" +id;
+        },
+        joinGame(gameid){
+            $.post ("/api/games/"+gameid + "/players")
+            .done(function(data){
+                window.location.href = "http://localhost:8080/web/game.html?gp="+data.gpId;
+            })
+            .fail(swal("Could not join game!"));
+        }
     }
-    }
-    });
+});
+
 $(function () {
   loadData();
   cargarUsuario();
@@ -27,6 +32,7 @@ function getParameterByName(name) {
   var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
+
 function loadData() {
   $.get('/api/leaderboard')
   .done(function (data){
@@ -41,9 +47,9 @@ function loadData() {
      $.get("/api/games")
            .done(function(data){
                app.games = data.games.reverse();
-               app.currentUser = data.player;
+               app.currentUser = data.player == "guest" ? data.player : data.player.email;
                })
-            .fail(function (jqXHR, textStatus) {
+            .fail(function () {
                swal('Failed: ' + textStatus);
 
                 })
@@ -61,41 +67,54 @@ $.post("/api/games")
 }
 
 function register(){
-var form = document.getElementById("register-form")
- $.post("/api/players",{
- email : form ["username"].value,
- password : form ["password"].value
- })
-  .done (function (jqXHR, textStatus) {
-                     swal('Success: ' + textStatus);
-                 })
- .done(function (){
- swal("Account created successfully. Redirecting...", {
-         closeOnClickOutside: false,
-         icon: "success",
-         buttons: false,
-         timer: 2500,
-       });
-       window.setTimeout(function () { window.location.reload() }, 2500);
+ if(app.usernameRegistration == "" || app.passwordRegistration == "")
+         swal("Please complete the fields.",{
+                         closeOnClickOutside: false,
+                         icon: "error",
+                         buttons: false,
+                         timer: 2500,
+                         })
+
+
+ else{
+  $.post("/api/players", {
+     username: app.usernameRegistration,
+     password: app.passwordRegistration
      })
-     .fail(function () {
-       swal("Sorry, we couldn't create your account. Try again.", {
-         closeOnClickOutside: true,
-         icon: "warning",
-         buttons: false,
-         timer: 2500,
-       });
-       //window.setTimeout(function () { window.location.reload() }, 2500);
+     .done(function(){
+      swal("Welcome. Lest play!!", {
+             closeOnClickOutside: false,
+             icon: "success",
+             buttons: false,
+             timer: 2500,
+           });
+           window.setTimeout(function () { window.location.reload() }, 2500);
+         })
+       .fail(function() {
+        swal("Sorry, we couldn't create your account. Try again", {
+                closeOnClickOutside: true,
+                icon: "error",
+                buttons: false,
+                timer: 2500,
+              });
      });
  }
+ }
+
+ function login() {
+   if(app.usernameLogin == "" || app.passwordLogin == "")
+        swal("Please complete the fields.",{
+                        closeOnClickOutside: false,
+                        icon: "error",
+                        buttons: false,
+                        timer: 2500,
+                        });
 
 
-     function login() {
-     if(app.currentUser == "guest"){
-    var form = document.getElementById('login-form')
+else{
  $.post("/api/login", {
-    username: form["username"].value,
-    password: form["password"].value
+    username: app.usernameLogin,
+    password: app.passwordLogin
     })
     .done(function(){
      swal("Welcome. Lest play!!", {
@@ -106,8 +125,6 @@ var form = document.getElementById("register-form")
           });
           window.setTimeout(function () { window.location.reload() }, 2500);
         })
-
-
       .fail(function() {
        swal("Sorry, we couldn't access your account. Try again", {
                closeOnClickOutside: true,
@@ -116,16 +133,16 @@ var form = document.getElementById("register-form")
                timer: 2500,
              });
     });
-    }
-    }
+}
+}
+
+
 function logout() {
       $.post("/api/logout")
-       .done(window.location.replace("games.html"))
+       .done( function(){
+            window.location.replace("games.html")
+       })
        .fail(function (jqXHR, textStatus) {
             swal('Failed: ' + textStatus);
         });
     }
-
-
-
-

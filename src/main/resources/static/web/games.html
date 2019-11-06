@@ -13,43 +13,26 @@
     <div class="container">
         <div class="row">
             <div class="col">
-        <div class="container-fluid" v-if="currentUser=='guest'">
-            <form id="login-form" onsubmit="return false">
-                <label>Name: <input type="text" name="username"></label>
-                <label>Password: <input type="password" name="password"></label>
-                <button  type="button" class="btn btn-success" onclick="login()">LOGIN</button>
-            </form>
-        </div>
+                <div class="container-fluid" v-if="currentUser=='guest'">
+                    <div id="login-form">
+                        <label>Name: <input v-model="usernameLogin" type="text" name="username"></label>
+                        <label>Password: <input v-model="passwordLogin" id="login-password" type="password" name="password"></label>
+                        <button type="button" class="btn btn-success" onclick="login()">LOGIN</button>
+                    </div>
+                </div>
             </div>
 
-        <!-- Registrarse -->
+            <!-- Registrarse -->
             <div v-show="currentUser == 'guest'">
-        <h3>Register</h3>
-            <div class="col">
-        <form id="register-form" onsubmit="return false">
-            <div class="contenedor-input">
-                <label>
-                    Email <span class="req">*</span>
-                </label>
-                <input type="email" name="username" required>
-            </div>
-            <div class="contenedor-input">
-                <label>
-                    Password <span class="req">*</span>
-                </label>
-                <input type="password" name="password" required >
-            </div>
+                <h3>Register</h3>
+                <div class="col">
+                    <div id="register-form">
+                        <input v-model="usernameRegistration" placeholder="Email" type="email" name="username" required>
+                            <input v-model="passwordRegistration" placeholder="Password" type="password" name="password" required>
 
-            <div class="contenedor-input">
-                <label>
-                    Repeat password <span class="req">*</span>
-                </label>
-                <input type="password" name="password2" required>
-            </div>
-
-            <button type="button" class="btn btn-success" onclick="register()">Register</button>
-        </form>
-            </div>
+                        <button type="button" class="btn btn-success" onclick="register()">Register</button>
+                    </div>
+                </div>
 
             </div>
             <div class="col">
@@ -58,13 +41,12 @@
                 </form>
             </div>
             <div class="col">
-                <button v-show="currentUser !='guest'" onclick="createGame()">Create game </button>
+                <button v-show="currentUser !='guest'" onclick="createGame()">Create game</button>
             </div>
 
 
         </div>
     </div>
-
 
 
     <div class="container-fluid">
@@ -74,22 +56,22 @@
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>
-                        <th> Top </th>
-                        <th> Email </th>
-                        <th> Games </th>
-                        <th> Won </th>
-                        <th> Ties </th>
-                        <th> Total </th>
+                        <th> Top</th>
+                        <th> Email</th>
+                        <th> Games</th>
+                        <th> Won</th>
+                        <th> Ties</th>
+                        <th> Total</th>
                     </tr>
                     </thead>
                     <tbody class="table table-striped">
                     <tr v-for="(player, index) in players">
-                        <th scope="row"> {{index + 1 }} </th>
-                        <td>{{player.email}} </td>
-                        <td> {{player.games}} </td>
-                        <td> {{player.won}} </td>
-                        <td> {{player.ties}} </td>
-                        <td> {{player.total}} </td>
+                        <th scope="row"> {{index + 1 }}</th>
+                        <td>{{player.email}}</td>
+                        <td> {{player.games}}</td>
+                        <td> {{player.won}}</td>
+                        <td> {{player.ties}}</td>
+                        <td> {{player.total}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -100,7 +82,7 @@
                     <thead class="thead-dark">
                     <tr>
                         <th>N°</th>
-                        <th>Player 1 </th>
+                        <th>Player 1</th>
                         <th>Player 2</th>
                         <!-- si no esta loggeado -->
                         <th v-show="currentUser !='guest'"></th>
@@ -115,16 +97,20 @@
                         <td>{{game.gamePlayers[1] != null ? game.gamePlayers[1].name : "Waiting oponent" }}</td>
                         <!-- si no esta loggeado -->
                         <!-- si el juego esta completo -->
-                        <td v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full </td>
+                        <td v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full</td>
                         <!-- unirse al juego -->
-                        <td v-if="currentUser != 'guest' && game.gamePlayers.length < 2 && currentUser.email != game.gamePlayers[0].email">
-                            <button  type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">Join Game</button>
+                        <td v-if="currentUser != 'guest' && game.gamePlayers.length < 2 && currentUser != game.gamePlayers[0].name">
+                            <button type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">Join
+                                Game
+                            </button>
                         </td>
 
 
                         <!-- volver al juego -->
-                         <td v-if= "currentUser != 'guest' && (currentUser.email == game.gamePlayers[0].email || currentUser.email == game.gamePlayers[1])">
-                            <button  type="button" class="btn btn-sm btn-success" v-on:click="returnToGame(game.gamePlayers[0].gpid)">Return</button>
+                        <td v-if="currentUser != 'guest' && (currentUser == game.gamePlayers[0].username || currentUser == game.gamePlayers[1])">
+                            <button type="button" class="btn btn-sm btn-success"
+                                    v-on:click="returnToGame(game.gamePlayers[0].gpid)">Return
+                            </button>
                         </td>
 
                     </tr>

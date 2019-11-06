@@ -51,15 +51,15 @@ public class SalvoController {
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String email, @RequestParam String password) {
+            @RequestParam String username, @RequestParam String password) {
 
-        if (email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
-        } else if (playerRepository.findByUserName(email) != null) {
+        } else if (playerRepository.findByUserName(username) != null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
-        Player player = new Player(email, password);
+        Player player = new Player(username, password);
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
