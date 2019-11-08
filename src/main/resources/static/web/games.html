@@ -71,9 +71,10 @@
                     <tr>
                         <th> Top</th>
                         <th> Email</th>
-                        <th> Games</th>
+                        <th> Played</th>
                         <th> Won</th>
-                        <th> Ties</th>
+                        <th> Tied</th>
+                        <th>Lost</th>
                         <th> Total</th>
                     </tr>
                     </thead>
@@ -84,7 +85,9 @@
                         <td class="table-warning"> {{player.games}}</td>
                         <td class="table-warning"> {{player.won}}</td>
                         <td class="table-warning"> {{player.ties}}</td>
+                        <td class="table-warning"> {{player.lost}}</td>
                         <td class="table-warning"> {{player.total}}</td>
+
                     </tr>
                     </tbody>
                 </table>
@@ -97,8 +100,6 @@
                         <th>N°</th>
                         <th>Player 1</th>
                         <th>Player 2</th>
-                        <!-- si no esta loggeado -->
-                        <th v-show="currentUser !='guest'"></th>
                         <!-- si está loggeado -->
                         <th v-show="currentUser !='guest'">Join Game</th>
                     </tr>
@@ -110,7 +111,7 @@
                         <td class="table-warning">{{game.gamePlayers[1] != null ? game.gamePlayers[1].name : "Waiting oponent" }}</td>
                         <!-- si no esta loggeado -->
                         <!-- si el juego esta completo -->
-                        <td class="table-warning" v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full</td>
+                        <td class="table-warning" v-if="currentUser !='guest' && game.gamePlayers[0] && game.gamePlayers[1]"> Game full</td>
                         <!-- unirse al juego -->
                         <td class="table-warning" v-if="currentUser != 'guest' && game.gamePlayers.length < 2 && currentUser != game.gamePlayers[0].name">
                             <button type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">JoinGame
