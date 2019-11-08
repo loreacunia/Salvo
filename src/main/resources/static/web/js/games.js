@@ -82,13 +82,15 @@ function register(){
      password: app.passwordRegistration
      })
      .done(function(){
-      swal("Welcome. Lest play!!", {
+      swal("Welcome. Let's play!", {
              closeOnClickOutside: false,
              icon: "success",
              buttons: false,
              timer: 2500,
            });
-           window.setTimeout(function () { window.location.reload() }, 2500);
+                app.usernameLogin=app.usernameRegistration;
+                app.passwordLogin=app.passwordRegistration;
+                login();
          })
        .fail(function() {
         swal("Sorry, we couldn't create your account. Try again", {
@@ -117,7 +119,7 @@ else{
     password: app.passwordLogin
     })
     .done(function(){
-     swal("Welcome. Lest play!!", {
+     swal("Welcome. Let's play!", {
             closeOnClickOutside: false,
             icon: "success",
             buttons: false,

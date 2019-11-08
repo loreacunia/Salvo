@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/games.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Supermercado+One&display=swap" rel="stylesheet">
     <title>¡Salvo!</title>
 </head>
 <body>
@@ -13,6 +14,8 @@
     <div class="container">
         <div class="row">
             <div class="col">
+                <div class="card">
+                    <div class="card-body">
                 <div class="container-fluid" v-if="currentUser=='guest'">
                     <div id="login-form">
                         <label>Name: <input v-model="usernameLogin" type="text" name="username"></label>
@@ -21,16 +24,26 @@
                     </div>
                 </div>
             </div>
+                </div>
+            </div>
 
             <!-- Registrarse -->
             <div v-show="currentUser == 'guest'">
-                <h3>Register</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Register</h5>
                 <div class="col">
                     <div id="register-form">
                         <input v-model="usernameRegistration" placeholder="Email" type="email" name="username" required>
                             <input v-model="passwordRegistration" placeholder="Password" type="password" name="password" required>
 
                         <button type="button" class="btn btn-success" onclick="register()">Register</button>
+                    </div>
+                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -66,12 +79,12 @@
                     </thead>
                     <tbody class="table table-striped">
                     <tr v-for="(player, index) in players">
-                        <th scope="row"> {{index + 1 }}</th>
-                        <td>{{player.email}}</td>
-                        <td> {{player.games}}</td>
-                        <td> {{player.won}}</td>
-                        <td> {{player.ties}}</td>
-                        <td> {{player.total}}</td>
+                        <th class="table-warning" scope="row"> {{index + 1 }}</th>
+                        <td class="table-warning">{{player.email}}</td>
+                        <td class="table-warning"> {{player.games}}</td>
+                        <td class="table-warning"> {{player.won}}</td>
+                        <td class="table-warning"> {{player.ties}}</td>
+                        <td class="table-warning"> {{player.total}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -92,27 +105,26 @@
                     </thead>
                     <tbody class="table table-striped">
                     <tr v-for="game in games">
-                        <th scope="row"> {{game.id}}</th>
-                        <td>{{game.gamePlayers[0].name}}</td>
-                        <td>{{game.gamePlayers[1] != null ? game.gamePlayers[1].name : "Waiting oponent" }}</td>
+                        <th class="table-warning"scope="row"> {{game.id}}</th>
+                        <td class="table-warning">{{game.gamePlayers[0].name}}</td>
+                        <td class="table-warning">{{game.gamePlayers[1] != null ? game.gamePlayers[1].name : "Waiting oponent" }}</td>
                         <!-- si no esta loggeado -->
                         <!-- si el juego esta completo -->
-                        <td v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full</td>
+                        <td class="table-warning" v-if="game.gamePlayers[0] && game.gamePlayers[1]"> Game full</td>
                         <!-- unirse al juego -->
-                        <td v-if="currentUser != 'guest' && game.gamePlayers.length < 2 && currentUser != game.gamePlayers[0].name">
-                            <button type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">Join
-                                Game
+                        <td class="table-warning" v-if="currentUser != 'guest' && game.gamePlayers.length < 2 && currentUser != game.gamePlayers[0].name">
+                            <button type="button" class="btn btn-sm btn-success" v-on:click="joinGame(game.id)">JoinGame
                             </button>
                         </td>
 
 
                         <!-- volver al juego -->
-                        <td v-if="currentUser != 'guest' && (currentUser == game.gamePlayers[0].username || currentUser == game.gamePlayers[1])">
-                            <button type="button" class="btn btn-sm btn-success"
+                        <td v-if="currentUser != 'guest' && (currentUser == game.gamePlayers[0].name || (game.gamePlayers[1] && currentUser == game.gamePlayers[1].name))">
+                            <button v-if="currentUser == game.gamePlayers[0].name" type="button" class="btn btn-sm btn-success"
                                     v-on:click="returnToGame(game.gamePlayers[0].gpid)">Return
                             </button>
+                            <button v-else v-on:click="returnToGame(game.gamePlayers[1].gpid)">return</button>
                         </td>
-
                     </tr>
                     </tbody>
                 </table>

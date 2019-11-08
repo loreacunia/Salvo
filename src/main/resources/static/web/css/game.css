@@ -1,3 +1,25 @@
+
+body{
+background-image: url(plantilla.jpeg);
+  background-repeat: repeat-x;
+}
+
+
+h3 {
+  font-family: 'Supermercado One', cursive;
+  color: black;
+  text-align: left;
+  background-color: grey;
+}
+table {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+
+}
+
+
+
+
+
 .ship-piece{
     background-color: darkslateblue;
 }
