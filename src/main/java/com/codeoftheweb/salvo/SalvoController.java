@@ -28,6 +28,9 @@ public class SalvoController {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private ShipRepository shipRepository;
+
 
     @RequestMapping("/games")
     public Map<String, Object> getGames(Authentication authentication) {
@@ -151,5 +154,57 @@ public class SalvoController {
         return crearMapa;
     }
 
+    //ships
+
+    @RequestMapping("/games/players/{gpId}/ships")
+    public ResponseEntity<Map> addShip(@PathVariable long gpId, Authentication authentication, @RequestBody Set<Ship> ships) {
+
+
+        if (isGuest(authentication)) {
+            return new ResponseEntity<>(makeMap("Error", "You are a guest"), HttpStatus.UNAUTHORIZED);
+        }
+
+        Player player = playerRepository.findByUserName(authentication.getName());
+        GamePlayer gamePlayer = gamePlayerRepository.getOne(gpId);
+
+        if (player == null) {
+
+            return new ResponseEntity<>(makeMap("error", "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        }
+
+        if (gamePlayer == null) {
+
+            return new ResponseEntity<>(makeMap("error", "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        }
+
+        if (gamePlayer.getPlayer().getId() != player.getId()) {
+
+            return new ResponseEntity<>(makeMap("error", "Player doesn't exist"), HttpStatus.FORBIDDEN);
+        }
+
+        if (!gamePlayer.getShips().isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "Unauthorized, already have ships"), HttpStatus.UNAUTHORIZED);
+        }
+
+        ships.forEach(ship -> {
+            ship.getGamePlayer();
+            shipRepository.save(ship);
+        });
+
+        return new ResponseEntity<>(makeMap("OK", "Ship created"), HttpStatus.CREATED);
+    }
+
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
 }
+
+
 

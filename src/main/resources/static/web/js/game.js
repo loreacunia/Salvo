@@ -57,3 +57,8 @@ function isHit(shipLocation,salvos,playerId) {
   });
   return hit
   };
+
+
+$.post("/games/players"+getParameterByName("gpId")+"/ships", {
+
+})
