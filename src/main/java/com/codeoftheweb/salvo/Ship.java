@@ -15,7 +15,7 @@ public class Ship {
 
     private String type;
     @Transient
-    private List<String> possibleTypes = new LinkedList<String>(Arrays.asList("Submarine", "Destroyer", "Patrol Boat"));
+    private List<String> possibleTypes = new LinkedList<String>(Arrays.asList("Submarine", "Destroyer", "Patrol Boat", "Carrier", "Battleship"));
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
@@ -23,7 +23,7 @@ public class Ship {
 
     @ElementCollection
     @Column (name="location")
-    private Set<String> Shiplocation;
+    private Set<String> shipLocation;
 
     public Ship(){
     }
@@ -32,7 +32,7 @@ public class Ship {
         if(this.possibleTypes.contains(type)){
             this.gamePlayer = gamePlayer;
             this.type = type;
-            this.Shiplocation=locations;
+            this.shipLocation=locations;
         }
         else {
             throw new Exception("Ship type not found");
@@ -48,7 +48,7 @@ public class Ship {
     }
 
     public Set<String> getLocations() {
-        return Shiplocation;
+        return shipLocation;
     }
 
     public Map<String,Object> getDto(){
@@ -58,6 +58,9 @@ public class Ship {
         return dto;
     }
 
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
 }
 
 

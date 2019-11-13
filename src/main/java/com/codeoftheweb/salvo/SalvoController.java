@@ -157,7 +157,7 @@ public class SalvoController {
     //ships
 
     @RequestMapping("/games/players/{gpId}/ships")
-    public ResponseEntity<Map> addShip(@PathVariable long gpId, Authentication authentication, @RequestBody Set<Ship> ships) {
+    public ResponseEntity<Map> addShip(@PathVariable long gpId, Authentication authentication, @RequestBody List<Ship> ships) {
 
 
         if (isGuest(authentication)) {
@@ -187,7 +187,7 @@ public class SalvoController {
         }
 
         ships.forEach(ship -> {
-            ship.getGamePlayer();
+            ship.setGamePlayer(gamePlayer);
             shipRepository.save(ship);
         });
 
