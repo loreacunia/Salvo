@@ -74,10 +74,10 @@ public class SalvoController {
         Map<String, Object> dto = gamePlayer.getGame().getDto();
         dto.put("ships", getShipList(gamePlayer.getShips()));
         Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
-        List<Salvo> salvos = gamePlayers.stream()
+        Set<Salvo> salvos = gamePlayers.stream()
                 .flatMap(gp -> gp.getSalvos()
                         .stream())
-                .collect(Collectors.toList());
+                .collect(toSet());
         dto.put("salvos", salvos.stream().map(salvo -> salvo.getDto()));
         return dto;
     }
@@ -141,7 +141,7 @@ public class SalvoController {
 
 
 
-    private List<Map<String, Object>> getShipList(List<Ship> ships) {
+    private List<Map<String, Object>> getShipList(Set<Ship> ships) {
         return ships
                 .stream()
                 .map(ship -> ship.getDto())
@@ -199,8 +199,8 @@ public class SalvoController {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
 
-    public Map<String, Object> makeMap(String key, Object value) {
-         Map<String, Object> map = new HashMap<>();
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
         map.put(key, value);
         return map;
     }

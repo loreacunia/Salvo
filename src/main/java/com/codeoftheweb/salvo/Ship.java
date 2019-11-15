@@ -47,17 +47,17 @@ public class Ship {
         return possibleTypes;
     }
 
-    public List<String> getLocation() {
+    public List<String> getShipLocation() {
         return shipLocation;
     }
 
     public Map<String,Object> getDto(){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("shipType", getType());
-        dto.put("shipLocation", getLocation());
+        dto.put("shipLocation", getShipLocation());
         return dto;
     }
-    
+
 
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;

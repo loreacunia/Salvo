@@ -2,8 +2,6 @@ package com.codeoftheweb.salvo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.*;
@@ -25,13 +23,12 @@ public class GamePlayer {
     @JoinColumn(name="game_id")//Agregar columna con este nombre
     private Game game;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany (mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    List<Ship> ships;
+    Set<Ship> ships = new HashSet<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany (mappedBy =  "gamePlayer", fetch = FetchType.EAGER)
-    List <Salvo> salvos;
+
+    @OneToMany (mappedBy =  "gamePlayers", fetch = FetchType.EAGER)
+    Set <Salvo> Salvos = new HashSet<>();
     public GamePlayer() {
     }
 
@@ -59,13 +56,13 @@ public class GamePlayer {
     }
 
 
-    public List<Ship> getShips() {
+    public Set<Ship> getShips() {
         return ships;
     }
 
 
-    public List<Salvo> getSalvos() {
-        return salvos;
+    public Set<Salvo> getSalvos() {
+        return Salvos;
     }
 
     public Map<String, Object> getDto() {
