@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,21 +19,21 @@ public class Salvo {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gamePlayer_id")
-    private GamePlayer gamePlayers;
+    private GamePlayer gamePlayer;
 
     private int turn;
 
 
     @ElementCollection
     @Column(name = "locations")
-    private Set<String> salvosLocation;
+    private List<String> salvosLocation;
 
     public Salvo() {
 
     }
 
-    public Salvo(GamePlayer gamePlayers, int turn, Set<String> salvosLocation) {
-        this.gamePlayers = gamePlayers;
+    public Salvo(GamePlayer gamePlayer, int turn, List<String> salvosLocation) {
+        this.gamePlayer = gamePlayer;
         this.turn = turn;
         this.salvosLocation = salvosLocation;
     }
@@ -42,14 +43,14 @@ public class Salvo {
     }
 
     public GamePlayer getGamePlayers() {
-        return gamePlayers;
+        return gamePlayer;
     }
 
     public int getTurn() {
         return turn;
     }
 
-    public Set<String> getSalvosLocation() {
+    public List<String> getSalvosLocation() {
         return salvosLocation;
     }
 

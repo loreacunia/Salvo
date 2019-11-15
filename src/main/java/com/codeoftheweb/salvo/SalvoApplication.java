@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -73,11 +74,11 @@ public class SalvoApplication {
             gamePlayerRepository.save(gamePlayer6);
             gamePlayerRepository.save(gamePlayer7);
 
-            Set<String> shipL1 = new HashSet<>(Arrays.asList("H2", "H3", "H4"));
-            Set<String> shipL2 = new HashSet<>(Arrays.asList("E1", "F1", "G1"));
-            Set<String> shipL3 = new HashSet<>(Arrays.asList("B4", "B5"));
-            Set<String> shipL4 = new HashSet<>(Arrays.asList("B5", "C5", "D5"));
-            Set<String> shipL5 = new HashSet<>(Arrays.asList("F1", "F2"));
+            List<String> shipL1 = Arrays.asList("H2", "H3", "H4");
+            List<String> shipL2 = Arrays.asList("E1", "F1", "G1");
+            List<String> shipL3 = Arrays.asList("B4", "B5");
+            List<String> shipL4 = Arrays.asList("B5", "C5", "D5");
+            List<String> shipL5 = Arrays.asList("F1", "F2");
 
             Ship ship1 = new Ship(gamePlayer1, "Destroyer", shipL1);
             Ship ship2 = new Ship(gamePlayer1, "Submarine", shipL2);
@@ -88,11 +89,11 @@ public class SalvoApplication {
 
             shipRepository.saveAll(Arrays.asList(ship1, ship2, ship3, ship4, ship5));
 
-            Set<String> salvoL1 = new HashSet<>(Arrays.asList("H4", "H3", "H2"));
-            Set<String> salvoL2 = new HashSet<>(Arrays.asList("B4", "B5", "B6"));
-            Set<String> salvoL3 = new HashSet<>(Arrays.asList("E1", "E2"));
-            Set<String> salvoL4 = new HashSet<>(Arrays.asList("B5", "C5", "D5"));
-            Set<String> salvoL5 = new HashSet<>(Arrays.asList("F2", "F3"));
+            List<String> salvoL1 = Arrays.asList("H4", "H3", "H2");
+            List<String> salvoL2 = Arrays.asList("B4", "B5", "B6");
+            List<String> salvoL3 = Arrays.asList("E1", "E2");
+            List<String> salvoL4 = Arrays.asList("B5", "C5", "D5");
+            List<String> salvoL5 = Arrays.asList("F2", "F3");
 
             Salvo salvo1 = new Salvo(gamePlayer1, 1, salvoL1);
             Salvo salvo2 = new Salvo(gamePlayer2, 1, salvoL1);
@@ -157,6 +158,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers( "/api/leaderboard").permitAll()
             .antMatchers( "/api/games/*/players").permitAll()
             .antMatchers("/api/game_view/**", "/web/game.html*").hasAuthority("USER")
+            .antMatchers("/api/games/players/*/ships").hasAuthority("USER")
             .antMatchers( "/rest/*").hasAuthority("ADMIN")
             .anyRequest().denyAll();
 

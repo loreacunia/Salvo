@@ -23,16 +23,16 @@ public class Ship {
 
     @ElementCollection
     @Column (name="location")
-    private Set<String> shipLocation;
+    private List<String> shipLocation;
 
     public Ship(){
     }
 
-    public Ship(GamePlayer gamePlayer, String type , Set<String>locations) throws Exception {
+    public Ship(GamePlayer gamePlayer, String type , List<String>shipLocation) throws Exception {
         if(this.possibleTypes.contains(type)){
             this.gamePlayer = gamePlayer;
             this.type = type;
-            this.shipLocation=locations;
+            this.shipLocation=shipLocation;
         }
         else {
             throw new Exception("Ship type not found");
@@ -47,16 +47,17 @@ public class Ship {
         return possibleTypes;
     }
 
-    public Set<String> getLocations() {
+    public List<String> getLocation() {
         return shipLocation;
     }
 
     public Map<String,Object> getDto(){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("shipType", getType());
-        dto.put("shipLocations", getLocations());
+        dto.put("shipLocation", getLocation());
         return dto;
     }
+    
 
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
