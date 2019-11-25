@@ -86,15 +86,24 @@ public class SalvoController {
 
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+        Player player = playerRepository.findByUserName(authentication.getName());
+        Map<String, Object> dto = new LinkedHashMap<>();
+
         if (Guest(authentication)) {
             return new ResponseEntity<>(MakeMap("error", "No player logged in"), HttpStatus.FORBIDDEN);
         }
-        Game game = gameRepository.save(new Game(0));
+        else {
+            Game game = gameRepository.save(new Game(0));
+            GamePlayer gamePlayer = gamePlayerRepository.save(new GamePlayer(player, game));
+            return new ResponseEntity<>(MakeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 
-        Player player = playerRepository.findByUserName(authentication.getName());
+        }
 
-        GamePlayer gamePlayer = gamePlayerRepository.save(new GamePlayer(player, game));
-        return new ResponseEntity<>(MakeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
+
+
+
+
+
 
     }
 

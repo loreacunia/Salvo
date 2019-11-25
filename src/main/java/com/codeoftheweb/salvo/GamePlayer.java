@@ -27,8 +27,10 @@ public class GamePlayer {
     Set<Ship> ships = new HashSet<>();
 
 
-    @OneToMany (mappedBy =  "gamePlayers", fetch = FetchType.EAGER)
+    @OneToMany (mappedBy =  "gamePlayer", fetch = FetchType.EAGER)
     Set <Salvo> Salvos = new HashSet<>();
+
+
     public GamePlayer() {
     }
 
@@ -69,7 +71,18 @@ public class GamePlayer {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("gpid", getId());
         dto.put("id", getPlayer().getId());
+        dto.put("hasShips", this.hasShips());
         dto.put("name", getPlayer().getUserName());
         return dto;
     }
+
+    public String hasShips(){
+        if (this.getShips().size()>0){
+            return "YES";
+        }
+        else{
+            return "NO";
+        }
+    }
 }
+

@@ -10,13 +10,18 @@ var  app = new Vue ({
         passwordRegistration:""
     },
     methods: {
-        returnToGame(id) {
-            window.location.href = "http://localhost:8080/web/game.html?gp=" +id;
+        returnToGame(id, hasShips) {
+        if(hasShips=="YES"){
+        window.location.href = "http://localhost:8080/web/game.html?gp=" +id;
+        } else {
+        window.location.href = "http://localhost:8080/web/grid.html?gp=" +id;
+        }
         },
+
         joinGame(gameid){
             $.post ("/api/games/"+gameid + "/players")
             .done(function(data){
-                window.location.href = "http://localhost:8080/web/game.html?gp="+data.gpId;
+                window.location.href = "http://localhost:8080/web/grid.html?gp="+data.gpId;
             })
             .fail(swal("Could not join game!"));
         }
@@ -61,7 +66,7 @@ $.post("/api/games")
                  swal('Success game created: ',{
                  timer: 2500,
                  });
-            window.setTimeout(function() {window.location.href = '/web/game.html?gp='+data.gpid;
+            window.setTimeout(function() {window.location.href = '/web/grid.html?gp='+data.gpid;
             }, 2500)
     })
 }
