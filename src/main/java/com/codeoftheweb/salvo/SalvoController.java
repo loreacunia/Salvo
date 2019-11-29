@@ -31,6 +31,10 @@ public class SalvoController {
     @Autowired
     private ShipRepository shipRepository;
 
+    @Autowired
+    private SalvoRepository salvoRepository;
+
+
 
     @RequestMapping("/games")
     public Map<String, Object> getGames(Authentication authentication) {
@@ -201,6 +205,65 @@ public class SalvoController {
         });
 
         return new ResponseEntity<>(makeMap("OK", "Ship created"), HttpStatus.CREATED);
+    }
+
+
+
+    @RequestMapping("/games/players/{id}/salvoes")
+    private ResponseEntity<Map<String,Object>> AddSalvoes(@PathVariable long id,
+                                                          @RequestBody Salvo salvo,
+                                                          Authentication authentication) {
+
+
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
+        Player loggedPlayer = getAuthentication(authentication);
+
+        if (loggedPlayer == null)
+            return new ResponseEntity<>(MakeMap("error", "No player logged in"), HttpStatus.UNAUTHORIZED);
+        if (gamePlayer == null)
+            return new ResponseEntity<>(MakeMap("error", "No such gamePlayer"), HttpStatus.FORBIDDEN);
+        if (WrongGamePlayer(gamePlayer, loggedPlayer))
+            return new ResponseEntity<>(MakeMap("error", "Wrong GamePlayer"), HttpStatus.FORBIDDEN);
+        if (salvo.getSalvoLocations().size()> 5){
+            return new ResponseEntity<>(MakeMap("error", "Wrong GamePlayer"), HttpStatus.FORBIDDEN);
+        } else {
+            if (!turnHasSalvoes(salvo, gamePlayer.getSalvos())) {
+                salvo.setTurn(gamePlayer.getSalvos().size() + 1);
+                salvo.setGamePlayer(gamePlayer);
+                salvoRepository.save(salvo);
+                return new ResponseEntity<>(MakeMap("ok", "Salvoes added"), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(MakeMap("error", "Player has fired salvoes in this turn"), HttpStatus.FORBIDDEN);
+            }
+        }
+    }
+
+    private boolean turnHasSalvoes(Salvo salvo, Set<Salvo> salvos) {
+        boolean hasSalvoes = false;
+        for (Salvo paraSalvo: salvos) {
+            if(paraSalvo.getTurn() == salvo.getTurn()){
+                hasSalvoes = true;
+            }
+        }
+        return hasSalvoes;
+
+    }
+
+    private boolean WrongGamePlayer(GamePlayer gamePlayer, Player loggedPlayer) {
+        boolean incorrectGP = gamePlayer.getPlayer().getId() != loggedPlayer.getId();
+        return incorrectGP;
+
+
+    }
+
+    private Player getAuthentication(Authentication authentication) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken)
+        {
+            return null;
+        }else   {
+            return playerRepository.findByUserName((authentication.getName()));
+        }
+
     }
 
 

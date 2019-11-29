@@ -61,6 +61,18 @@ public class Salvo {
         dto.put("salvoLocations", this.salvosLocation);
         return dto;
     }
+
+    public List<String> getSalvoLocations() {
+        return salvosLocation;
+    }
+
+    public void setTurn(int i) {
+        this.turn = turn;
+    }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
+    }
 }
 
 

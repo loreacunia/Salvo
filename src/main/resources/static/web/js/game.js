@@ -76,20 +76,49 @@ function WhoIsWho(){
 //  turn: 1,
 //  locations:["A1","C2","G4"]
 //}
-//Disparar los salvos
-function shoot(turno,locations){
-    var url = "/api/games/players/" + getParameterByName("gp") + "/salvos"
+
+function getTurn (){
+  var arr=[]
+  var turn = 0;
+  gamesData.salvoes.map(function(salvo){
+    if(salvo.player == actualPlayer.id){
+      arr.push(salvo.turn);
+    }
+  })
+  turn = Math.max.apply(Math, arr);
+
+  if (turn == -Infinity){
+    return 1;
+  } else {
+    return turn + 1;
+  }
+
+}
+
+function shoot(){
+    var turno = getTurn()
+    var locationsToShoot=[];
+    $(".targetCell").each(function(){
+        let location = $(this).attr("id").substring(7);
+        let locationConverted = String.fromCharCode(parseInt(location[0]) + 65) + (parseInt(location[1]) + 1)
+
+        locationsToShoot.push(locationConverted)
+    })
+    console.log(locationsToShoot)
+    var url = "/api/games/players/" + getParameterByName("gp") + "/salvoes"
     $.post({
         url: url,
-        data: JSON.stringify({turn: turno, salvoLocations:locations}),
+        data: JSON.stringify({turn: turno, salvoLocations:locationsToShoot}),
         dataType: "text",
         contentType: "application/json"
     })
     .done(function (response, status, jqXHR) {
         alert( "Salvo added: " + response );
-        //location.reload
+        location.reload();
     })
     .fail(function (jqXHR, status, httpError){
-        alert("Failed to add salvos: " + status + " " + httpError);
+        alert("Failed to add salvo: " + status + " " + httpError);
     })
+
 }
+
