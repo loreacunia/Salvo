@@ -80,7 +80,7 @@ function WhoIsWho(){
 function getTurn (){
   var arr=[]
   var turn = 0;
-  gamesData.salvoes.map(function(salvo){
+  gamesData.salvos.map(function(salvo){
     if(salvo.player == actualPlayer.id){
       arr.push(salvo.turn);
     }

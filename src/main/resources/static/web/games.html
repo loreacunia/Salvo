@@ -15,39 +15,17 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-body">
                 <div class="container-fluid" v-if="currentUser=='guest'">
                     <div id="login-form">
-                        <label>Name: <input v-model="usernameLogin" type="text" name="username"></label>
-                        <label>Password: <input v-model="passwordLogin" id="login-password" type="password" name="password"></label>
+                        <label>Name: <input v-model="username" type="text" name="username"></label>
+                        <label>Password: <input v-model="password" id="login" type="password" name="password"></label>
                         <button type="button" class="btn btn-success" onclick="login()">LOGIN</button>
-                    </div>
-                </div>
-            </div>
-                </div>
-            </div>
-
-            <!-- Registrarse -->
-            <div v-show="currentUser == 'guest'">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Register</h5>
-                <div class="col">
-                    <div id="register-form">
-                        <input v-model="usernameRegistration" placeholder="Email" type="email" name="username" required>
-                            <input v-model="passwordRegistration" placeholder="Password" type="password" name="password" required>
-
                         <button type="button" class="btn btn-success" onclick="register()">Register</button>
                     </div>
                 </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>
                 </div>
 
-            </div>
             <div class="col">
                 <form v-show="currentUser !='guest'" id="logout-form" onsubmit="return false">
                     <button type="button" class="btn btn-success" onclick="logout()">Log out</button>
@@ -102,6 +80,7 @@
                         <th>Player 2</th>
                         <!-- si está loggeado -->
                         <th v-show="currentUser !='guest'">Join Game</th>
+                        <th v-show="currentUser !='guest'">Return</th>
                     </tr>
                     </thead>
                     <tbody class="table table-striped">
@@ -122,7 +101,7 @@
                         <!-- volver al juego -->
                         <td v-if="currentUser != 'guest' && (currentUser == game.gamePlayers[0].name || (game.gamePlayers[1] && currentUser == game.gamePlayers[1].name))">
                             <button v-if="currentUser == game.gamePlayers[0].name" type="button" class="btn btn-sm btn-success"
-                                    v-on:click="returnToGame(game.gamePlayers[0].gpid)">Return
+                                    v-on:click="returnToGame(game.gamePlayers[0].gpid, game.gamePlayers[0].hasShips )">Return
                             </button>
                             <button v-else v-on:click="returnToGame(game.gamePlayers[1].gpid, game.gamePlayers[1].hasShips)">return</button>
                         </td>

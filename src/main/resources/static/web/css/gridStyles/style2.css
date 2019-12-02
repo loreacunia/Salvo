@@ -201,11 +201,32 @@ body {
     display: block;
 }
 
+.targetCell{
+    /*background-image: url('ships/target.png')*/
+    background-color: aqua;
+}
+
+
 .salvo{
     background-color: purple;
 }
 
 .ship-down{
     background-color: red;
+}
+
+.boton-circular {
+    width: 85px;
+    height: 85px;
+    padding: 6px 0px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 19px;
+    line-height: 1.42857;
+    background-color: #008f39;
+    position: absolute;
+    left: 90%;
+    top: 85%;
+
 }
 

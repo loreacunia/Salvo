@@ -4,10 +4,8 @@ var  app = new Vue ({
         games:[],
         players:[],
         currentUser: "",
-        usernameLogin: "",
-        passwordLogin: "",
-        usernameRegistration: "",
-        passwordRegistration:""
+        username: "",
+        password: ""
     },
     methods: {
         returnToGame(id, hasShips) {
@@ -21,12 +19,13 @@ var  app = new Vue ({
         joinGame(gameid){
             $.post ("/api/games/"+gameid + "/players")
             .done(function(data){
-                window.location.href = "http://localhost:8080/web/grid.html?gp="+data.gpId;
+            window.setTimeout(function () {
+                window.location.href = "http://localhost:8080/web/grid.html?gp="+data.gpId;}, 1500);
             })
-            .fail(swal("Could not join game!"));
-        }
-    }
-});
+            .fail(function () {
+            swal("Could not join game!",);
+            }
+            )}}});
 
 $(function () {
   loadData();
@@ -72,7 +71,7 @@ $.post("/api/games")
 }
 
 function register(){
- if(app.usernameRegistration == "" || app.passwordRegistration == "")
+ if(app.username == "" || app.password == "")
          swal("Please complete the fields.",{
                          closeOnClickOutside: false,
                          icon: "error",
@@ -83,8 +82,8 @@ function register(){
 
  else{
   $.post("/api/players", {
-     username: app.usernameRegistration,
-     password: app.passwordRegistration
+     username: app.username,
+     password: app.password
      })
      .done(function(){
       swal("Welcome. Let's play!", {
@@ -93,8 +92,7 @@ function register(){
              buttons: false,
              timer: 2500,
            });
-                app.usernameLogin=app.usernameRegistration;
-                app.passwordLogin=app.passwordRegistration;
+
                 login();
          })
        .fail(function() {
@@ -109,7 +107,7 @@ function register(){
  }
 
  function login() {
-   if(app.usernameLogin == "" || app.passwordLogin == "")
+   if(app.username == "" || app.password == "")
         swal("Please complete the fields.",{
                         closeOnClickOutside: false,
                         icon: "error",
@@ -120,8 +118,8 @@ function register(){
 
 else{
  $.post("/api/login", {
-    username: app.usernameLogin,
-    password: app.passwordLogin
+    username: app.username,
+    password: app.password
     })
     .done(function(){
      swal("Welcome. Let's play!", {

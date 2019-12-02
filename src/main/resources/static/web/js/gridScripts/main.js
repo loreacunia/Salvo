@@ -294,3 +294,13 @@ function addShips(){
 })
 
 }
+
+function backToHomepage() {
+  swal("Closing game...", {
+    closeOnClickOutside: true,
+    icon: "info",
+    buttons: false,
+    timer: 1500,
+  });
+  window.setTimeout(function () { window.location.href = "http://localhost:8080/web/games.html" }, 1500);
+}
