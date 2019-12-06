@@ -330,7 +330,7 @@ const setSalvos = function () {
         for (j = 0; j < gamesData.salvos[i].salvosLocations.length; j++) {
             let turn = gamesData.salvos[i].turn
             let player = gamesData.salvos[i].name
-            let x = +(gamesData.salvos[i].salvosLocations[j][1]) - 1
+            let x = +(gamesData.salvos[i].salvosLocations[j].substring(1)) - 1
             let y = stringToInt(gamesData.salvos[i].salvosLocations[j][0].toUpperCase())
             if (player == actualPlayer.id) {
                 document.getElementById(`salvos${y}${x}`).classList.add('salvos')
