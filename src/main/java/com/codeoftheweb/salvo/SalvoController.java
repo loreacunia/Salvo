@@ -224,7 +224,7 @@ public class SalvoController {
             return new ResponseEntity<>(MakeMap("error", "No such gamePlayer"), HttpStatus.FORBIDDEN);
         if (WrongGamePlayer(gamePlayer, loggedPlayer))
             return new ResponseEntity<>(MakeMap("error", "Wrong GamePlayer"), HttpStatus.FORBIDDEN);
-        if (salvo.getSalvoLocations().size()> 5){
+        if (salvo.getSalvosLocation().size()> 5){
             return new ResponseEntity<>(MakeMap("error", "Wrong GamePlayer"), HttpStatus.FORBIDDEN);
         } else {
             if (!turnHasSalvoes(salvo, gamePlayer.getSalvos())) {

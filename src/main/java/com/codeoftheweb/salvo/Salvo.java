@@ -58,13 +58,10 @@ public class Salvo {
         Map<String, Object> dto = new HashMap<>();
         dto.put("turn", this.turn);
         dto.put("player", getGamePlayers().getPlayer().getId());
-        dto.put("salvoLocations", this.salvosLocation);
+        dto.put("salvosLocations", this.salvosLocation);
         return dto;
     }
 
-    public List<String> getSalvoLocations() {
-        return salvosLocation;
-    }
 
     public void setTurn(int i) {
         this.turn = turn;

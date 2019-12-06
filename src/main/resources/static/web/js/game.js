@@ -29,24 +29,33 @@ fetch("/api/game_view/"+gpId)
      //A futuro para cargar los salvos por medio de gridstack
     //loadGridSalvo()
   }
-  createGrid(11, $(".grid-salvos"), 'salvos') //carga la matriz que contendra los salvoes pero sin gridstack.js
-  setSalvos() //carga los salvoes ya guardados
-  var contador = 0
-    //Una vez cargado los salvoes con createGrid procedemos a establecer una funcion click por cada celda de la siguiente manera
-    $('div[id^="salvos"].grid-cell').click(function(){
-        //seguir para codear el disparar una celda, tener en cuenta el tamaño maximo de disparos y que no pueda disparar a una celda ya pintada
-        //la diferencia entre una celda pintada y otra que no esta en la clase "salvo" que se le agrega
-//        console.log(evt.target)
-        console.log("d")
-//        si (laCeldaPintada){
-//            alert("no puedes")
-//        }else{
-//            if (!celdaAdisparar && contador < 5){
-//                addClass(celdaAdisparar)
-//                contador++
-//            }
-//        }
-    });
+
+
+   createGrid(11, $(".grid-salvos"), 'salvos') //carga la matriz que contendra los salvoes pero sin gridstack.js
+    setSalvos() //carga los salvoes ya guardados
+
+      //Una vez cargado los salvoes con createGrid procedemos a establecer una funcion click por cada celda de la siguiente manera
+      $('div[id^="salvos"].grid-cell') .click(function(){
+          if(!$(this).hasClass("salvo") && !$(this).hasClass("targetCell") && $(".targetCell").length < 5)
+            {
+              $(this).addClass("targetCell");
+            } else if($(this).hasClass("targetCell")){
+              $(this).removeClass("targetCell");}
+      })
+
+    //Determino que celdas golpee y las 'pinto'
+    gamesData.hits.opponent.forEach(function(playTurn) {
+            playTurn.hitLocations.forEach(function (hitCell) {
+  x = +(hitCell.substring(1)) - 1
+  y =stringToInt(hitCell[0].toUpperCase())
+                cellID = "#salvoes" + y + x;
+                $(cellID).addClass("hitCell");
+            });
+        });
+        makeGameRecordTable(gamesData.hits.opponent, "gameRecordOppTable");
+         makeGameRecordTable(gamesData.hits.self, "gameRecordSelfTable");
+
+
 })
 .catch(function(error){
 	console.log(error)
@@ -99,7 +108,7 @@ function shoot(){
     var turno = getTurn()
     var locationsToShoot=[];
     $(".targetCell").each(function(){
-        let location = $(this).attr("id").substring(7);
+        let location = $(this).attr("id").substring(6);
         let locationConverted = String.fromCharCode(parseInt(location[0]) + 65) + (parseInt(location[1]) + 1)
 
         locationsToShoot.push(locationConverted)
@@ -108,7 +117,7 @@ function shoot(){
     var url = "/api/games/players/" + getParameterByName("gp") + "/salvoes"
     $.post({
         url: url,
-        data: JSON.stringify({turn: turno, salvoLocations:locationsToShoot}),
+        data: JSON.stringify({turn: turno, salvosLocation:locationsToShoot}),
         dataType: "text",
         contentType: "application/json"
     })
@@ -121,4 +130,91 @@ function shoot(){
     })
 
 }
+function makeGameRecordTable (hitsArray, gameRecordTableId) {
+
+        var tableId = "#" + gameRecordTableId + " tbody";
+        $(tableId).empty();
+        var shipsAfloat = 5;
+        var playerTag;
+        if (gameRecordTableId == "gameRecordOppTable") {
+            playerTag = "#opp";
+        }
+        if (gameRecordTableId == "gameRecordSelfTable") {
+            playerTag = "#";
+        }
+
+        hitsArray.forEach(function (playTurn) {
+            var hitsReport = "";
+            if (playTurn.damages.carrierHits > 0){
+                hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
+                if (playTurn.damages.carrier === 5){
+                    hitsReport += "SUNK! ";
+                    shipsAfloat--;
+                }
+            }
+
+            if (playTurn.damages.battleshipHits > 0){
+                hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
+                if (playTurn.damages.battleship === 4){
+                    hitsReport += "SUNK! ";
+                    shipsAfloat--;
+                }
+            }
+            if (playTurn.damages.submarineHits > 0){
+                hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits, "hit") + " ";
+                if (playTurn.damages.submarine === 3){
+                    hitsReport += "SUNK! ";
+                    shipsAfloat--;
+                }
+            }
+            if (playTurn.damages.destroyerHits > 0){
+                hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits, "hit") + " ";
+                if (playTurn.damages.destroyer === 3){
+                    hitsReport += "SUNK! ";
+                    shipsAfloat--;
+                }
+            }
+            if (playTurn.damages.patrolboatHits > 0){
+                hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits, "hit") + " ";
+                if (playTurn.damages.patrolboat === 2){
+                    hitsReport += "SUNK! ";
+                    shipsAfloat--;
+                }
+            }
+
+            if (playTurn.missed > 0){
+                hitsReport +=  "Missed shots " + addDamagesIcons(playTurn.missed, "missed") + " ";
+            }
+
+            if (hitsReport === ""){
+                hitsReport = "All salvos missed! No damages!"
+            }
+
+            $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td></tr>').prependTo(tableId);
+
+        });
+        $('#shipsLeftSelfCount').text(shipsAfloat);
+    }
+
+    function addDamagesIcons (numberOfHits, hitOrMissed) {
+        var damagesIcons = "";
+        if (hitOrMissed === "missed") {
+            for (var i = 0; i < numberOfHits; i++) {
+                damagesIcons += "<img class='hitblast' src='img/missed.png'>"
+            }
+        }
+            if (hitOrMissed === "hit") {
+                for (var i = 0; i < numberOfHits; i++) {
+                    damagesIcons += "<img class='hitblast' src='img/redhit.png'>"
+                }
+        }
+        return damagesIcons;
+    }
+
+
+
+
+
+
+
 
