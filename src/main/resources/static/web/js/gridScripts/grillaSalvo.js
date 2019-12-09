@@ -332,7 +332,7 @@ const setSalvos = function () {
             let player = gamesData.salvos[i].name
             let x = +(gamesData.salvos[i].salvosLocations[j].substring(1)) - 1
             let y = stringToInt(gamesData.salvos[i].salvosLocations[j][0].toUpperCase())
-            if (player == actualPlayer.id) {
+            if (player == actualPlayer.player) {
                 document.getElementById(`salvos${y}${x}`).classList.add('salvos')
                 document.getElementById(`salvos${y}${x}`).innerHTML = `<span>${turn}</span>`
             } else {

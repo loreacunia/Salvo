@@ -73,8 +73,14 @@ public class SalvoController {
 
 
     @RequestMapping("/game_view/{id}")
-    public Map<String, Object> getGameView(@PathVariable long id) {
+    public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long id, Authentication authentication) {
+
+        Player authenticathedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).get();
+        if (gamePlayer.getPlayer().getId() != authenticathedPlayer.getId() ) {
+            return  new ResponseEntity<>(MakeMap("error", "This is not you game"), HttpStatus.FORBIDDEN);
+        }
+
         Map<String, Object> dto = gamePlayer.getGame().getDto();
         dto.put("ships", getShipList(gamePlayer.getShips()));
         Set<GamePlayer> gamePlayers = gamePlayer.getGame().getGamePlayers();
@@ -82,8 +88,9 @@ public class SalvoController {
                 .flatMap(gp -> gp.getSalvos()
                         .stream())
                 .collect(toSet());
-        dto.put("salvos", salvos.stream().map(salvo -> salvo.getDto()));
-        return dto;
+        dto.put("salvos", salvos.stream().map(salvo -> salvo.getDto())
+        );
+        return new ResponseEntity<>(dto,HttpStatus.CREATED) ;
     }
 
     // CREAR JUEGO
@@ -102,9 +109,6 @@ public class SalvoController {
             return new ResponseEntity<>(MakeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 
         }
-
-
-
 
 
 

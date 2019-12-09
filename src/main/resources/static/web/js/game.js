@@ -1,6 +1,6 @@
 var gamesData
 var actualPlayer
-var opponent = "Waiting for opponent"
+var opponent = {"name":"Waiting for opponent"}
 //Para obtener el id del gamePlayer colocado como query en la url
 var gpId = getParameterByName("gp")
 console.log(gpId)
@@ -65,17 +65,17 @@ fetch("/api/game_view/"+gpId)
 function WhoIsWho(){
   for(i = 0; i < gamesData.gamePlayers.length; i++){
     if(gamesData.gamePlayers[i].gpid == gpId){
-      actualPlayer = gamesData.gamePlayers[i].name
+      actualPlayer = gamesData.gamePlayers[i]
     } else{
-      opponent = gamesData.gamePlayers[i].name
+      opponent = gamesData.gamePlayers[i]
     }
   }
   let logger = document.getElementById("logger")
   let wrapper = document.createElement('DIV')
   let p1 = document.createElement('P')
-  p1.innerHTML = `Hi ${actualPlayer}!`
+  p1.innerHTML = `Hi ${actualPlayer.name}!`
   let p2 = document.createElement('P')
-  p2.innerHTML = `your opponent is: ${opponent}`
+  p2.innerHTML = `your opponent is: ${opponent.name}`
   wrapper.appendChild(p1)
   wrapper.appendChild(p2)
   logger.appendChild(wrapper)
@@ -211,7 +211,15 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         return damagesIcons;
     }
 
-
+function backToHomepage() {
+  swal("Closing game...", {
+    closeOnClickOutside: true,
+    icon: "info",
+    buttons: false,
+    timer: 1500,
+  });
+  window.setTimeout(function () { window.location.href = "http://localhost:8080/web/games.html" }, 1500);
+}
 
 
 

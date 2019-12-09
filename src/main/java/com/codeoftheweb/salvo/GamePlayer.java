@@ -24,11 +24,11 @@ public class GamePlayer {
     private Game game;
 
     @OneToMany (mappedBy = "gamePlayer", fetch = FetchType.EAGER)
-    Set<Ship> ships = new HashSet<>();
+    Set<Ship> ships;
 
 
     @OneToMany (mappedBy =  "gamePlayer", fetch = FetchType.EAGER)
-    Set <Salvo> Salvos = new HashSet<>();
+    Set <Salvo> Salvos;
 
 
     public GamePlayer() {

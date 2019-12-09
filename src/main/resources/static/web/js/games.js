@@ -16,16 +16,23 @@ var  app = new Vue ({
         }
         },
 
-        joinGame(gameid){
-            $.post ("/api/games/"+gameid + "/players")
-            .done(function(data){
-            window.setTimeout(function () {
-                window.location.href = "http://localhost:8080/web/grid.html?gp="+data.gpId;}, 1500);
-            })
-            .fail(function () {
-            swal("Could not join game!",);
+
+   joinGame(gameid) {
+      $.post("/api/games/" + gameid + "/players")
+        .done(function (data) {
+          swal("Joining game...", {
+            closeOnClickOutside: false,
+            icon: "info",
+            buttons: false,
+            timer: 1500,
+          });
+          window.setTimeout(function () {
+            window.location.href = "http://localhost:8080/web/game.html?gp=" + data.gpId;}, 1500);
+        });
             }
-            )}}});
+            },
+            }
+ );
 
 $(function () {
   loadData();

@@ -63,7 +63,7 @@ public class Salvo {
     }
 
 
-    public void setTurn(int i) {
+    public void setTurn(int turn) {
         this.turn = turn;
     }
 
