@@ -33,7 +33,6 @@ fetch("/api/game_view/"+gpId)
 
    createGrid(11, $(".grid-salvos"), 'salvos') //carga la matriz que contendra los salvoes pero sin gridstack.js
     setSalvos() //carga los salvoes ya guardados
-
       //Una vez cargado los salvoes con createGrid procedemos a establecer una funcion click por cada celda de la siguiente manera
       $('div[id^="salvos"].grid-cell') .click(function(){
           if(!$(this).hasClass("salvo") && !$(this).hasClass("targetCell") && $(".targetCell").length < 5)

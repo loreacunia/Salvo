@@ -27,7 +27,7 @@ var  app = new Vue ({
             timer: 1500,
           });
           window.setTimeout(function () {
-            window.location.href = "http://localhost:8080/web/game.html?gp=" + data.gpId;}, 1500);
+            window.location.href = "http://localhost:8080/web/grid.html?gp=" + data.gpId;}, 1500);
         });
             }
             },
